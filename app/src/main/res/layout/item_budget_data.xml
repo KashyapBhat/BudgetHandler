@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="50dp"
+              android:orientation="vertical"
+              android:gravity="center">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:minHeight="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Milk"
+                android:padding="5dp"
+                android:id="@+id/tvItemName"
+                android:gravity="center"
+                android:layout_weight="0.5"/>
+        <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:padding="5dp"
+                android:gravity="center"
+                android:id="@+id/tvItemCost"
+                android:layout_weight="0.5"/>
+    </LinearLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="2dp"
+          android:background="@color/colorPrimary"/>
+</LinearLayout>
