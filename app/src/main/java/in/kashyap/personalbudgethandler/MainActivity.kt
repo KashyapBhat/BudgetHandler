@@ -1,13 +1,11 @@
 package `in`.kashyap.personalbudgethandler
 
+import `in`.kashyap.personalbudgethandler.model.PurchasedItem
+import `in`.kashyap.personalbudgethandler.recyclerView.BudgetDataRVAdapter
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.Window
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,20 +13,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.hawk.Hawk
 
 import kotlinx.android.synthetic.main.activity_main.*
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.DialogInterface
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.lang.Exception
-import kotlin.math.cos
 
 
 class MainActivity : AppCompatActivity() {
 
-    var data = ArrayList<BudgetData>()
+    var data = ArrayList<PurchasedItem>()
     var dataMap = HashMap<String, Double>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +64,10 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.rvBudetData)
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         val bdata = data
-        val adapter = BudgetDataRVAdapter(bdata)
+        val adapter =
+            BudgetDataRVAdapter(
+                bdata
+            )
         recyclerView.adapter = adapter
         val totalItemsCost = findViewById<TextView>(R.id.tvTotalCost)
         val total: String = dataMap["TotalCostOfAllItemsCombined"].toString()
@@ -95,7 +91,12 @@ class MainActivity : AppCompatActivity() {
             if (etName.text.isNotEmpty() && etCost.text.isNotEmpty()) {
                 try {
                     val cost: Double = etCost.text.toString().toDouble()
-                    data.add(BudgetData(etName.text.toString(), cost))
+                    data.add(
+                        PurchasedItem(
+                            etName.text.toString(),
+                            cost
+                        )
+                    )
                     var total: Double? = dataMap.get("TotalCostOfAllItemsCombined")
                     total = total?.plus(cost)
                     total?.let { it1 -> dataMap.put("TotalCostOfAllItemsCombined", it1) }
