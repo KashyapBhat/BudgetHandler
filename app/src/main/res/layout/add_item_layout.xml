@@ -1,54 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical">
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:id="@+id/tvTitle"
-                  android:textSize="15dp"
-                  android:layout_margin="10dp"
-                  tools:text="Please add your item and it's cost"/>
-        <EditText
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="15dp"
+                tools:text="Please add your item and it's cost" />
+
+        <EditText
                 android:id="@+id/etAddName"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
-                android:hint="Name"/>
-        <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/etAddCost"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="20dp"
-                android:inputType="numberDecimal"
                 android:layout_marginBottom="10dp"
-                android:hint="Cost"/>
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="horizontal"
-                      android:layout_margin="20dp"
-                      android:gravity="center">
-            <Button android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="60dp"
-                    android:text="cancel"
-                    android:textColor="#666666"
+                android:hint="Name"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:singleLine="true">
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+                android:id="@+id/etAddCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Cost"
+                android:inputType="numberDecimal" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+            <Button
                     android:id="@+id/btnCancel"
                     style="@style/Widget.AppCompat.Button.Borderless"
-            />
-            <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/tick_mark"
-                    android:id="@+id/btnAdd"/>
+                    android:layout_height="48dp"
+                    android:layout_weight="0.4"
+                    android:text="Cancel"
+                    android:textAllCaps="false"
+                    android:textColor="#666666" />
+
+            <Button
+                    android:id="@+id/btnAdd"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="0.6"
+                    android:background="@color/colorPrimary"
+                    android:text="Add"
+                    android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

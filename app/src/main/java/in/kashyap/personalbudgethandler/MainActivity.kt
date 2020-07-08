@@ -21,6 +21,7 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.getSystemService
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.lang.Exception
 import kotlin.math.cos
 
@@ -33,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Hawk.init(applicationContext).build()
-//        setSupportActionBar(toolbar)
         getHawk()
         setRecyclerView()
         fab.setOnClickListener {
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         Hawk.deleteAll()
         data = ArrayList()
         dataMap = HashMap()
-        dataMap.put("TotalCostOfAllItemsCombined", 0.0)
+        dataMap["TotalCostOfAllItemsCombined"] = 0.0
         Hawk.put("DATA", data)
         Hawk.put("DMAP", dataMap)
         setRecyclerView()
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             data = Hawk.get("DATA")
         if (Hawk.contains("DMAP"))
             dataMap = Hawk.get("DMAP")
-        else dataMap.put("TotalCostOfAllItemsCombined", 0.0)
+        else dataMap["TotalCostOfAllItemsCombined"] = 0.0
     }
 
     private fun setRecyclerView() {
@@ -79,16 +79,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addItemToBuy() {
-        val dialog = Dialog(this)
+        val dialog = BottomSheetDialog(this, R.style.DialogStyle)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.add_item_layout)
-        val body = dialog.findViewById(R.id.tvTitle) as TextView
+        val body = dialog.findViewById(R.id.tvTitle) as TextView?
+        val btnAdd = dialog.findViewById(R.id.btnAdd) as Button?
+        val btnCancel = dialog.findViewById(R.id.btnCancel) as Button?
+        val etName = dialog.findViewById(R.id.etAddName) as EditText?
+        val etCost = dialog.findViewById(R.id.etAddCost) as EditText?
+        if (body == null || btnAdd == null || btnCancel == null || etName == null || etCost == null)
+            return
         body.text = "Please add your item and it's cost"
-        val btnAdd = dialog.findViewById(R.id.btnAdd) as ImageView
-        val btnCancel = dialog.findViewById(R.id.btnCancel) as Button
-        val etName = dialog.findViewById(R.id.etAddName) as EditText
-        val etCost = dialog.findViewById(R.id.etAddCost) as EditText
         btnAdd.setOnClickListener {
             if (etName.text.isNotEmpty() && etCost.text.isNotEmpty()) {
                 try {
@@ -110,20 +112,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
         btnCancel.setOnClickListener {
-            showKeyBoard()
             dialog.dismiss()
         }
         dialog.show()
         showKeyBoard()
     }
 
-    fun showKeyBoard() {
-        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun showKeyBoard() {
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
-    fun closeKeyboard() {
-        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun closeKeyboard() {
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
@@ -134,6 +137,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        closeKeyboard()
         Hawk.put("DATA", data)
         Hawk.put("DMAP", dataMap)
     }
