@@ -3,31 +3,29 @@ package `in`.kashyap.personalbudgethandler
 import `in`.kashyap.personalbudgethandler.model.PurchasedItem
 import `in`.kashyap.personalbudgethandler.recyclerView.BudgetDataRVAdapter
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import android.view.Window
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.orhanobut.hawk.Hawk
-
-import kotlinx.android.synthetic.main.activity_main.*
-import android.util.Log
-import android.view.inputmethod.InputMethodManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.lang.Exception
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
     var data = ArrayList<PurchasedItem>()
-    var dataMap = HashMap<String, Double>()
+    var dataMap: Double = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Hawk.init(applicationContext).build()
-        getHawk()
+        dataMap = 0.0
         setRecyclerView()
         fab.setOnClickListener {
             addItemToBuy()
@@ -43,21 +41,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clearAllData() {
-        Hawk.deleteAll()
         data = ArrayList()
-        dataMap = HashMap()
-        dataMap["TotalCostOfAllItemsCombined"] = 0.0
-        Hawk.put("DATA", data)
-        Hawk.put("DMAP", dataMap)
+        dataMap = 0.0
         setRecyclerView()
-    }
-
-    private fun getHawk() {
-        if (Hawk.contains("DATA"))
-            data = Hawk.get("DATA")
-        if (Hawk.contains("DMAP"))
-            dataMap = Hawk.get("DMAP")
-        else dataMap["TotalCostOfAllItemsCombined"] = 0.0
     }
 
     private fun setRecyclerView() {
@@ -70,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             )
         recyclerView.adapter = adapter
         val totalItemsCost = findViewById<TextView>(R.id.tvTotalCost)
-        val total: String = dataMap["TotalCostOfAllItemsCombined"].toString()
+        val total: String = dataMap.toString()
         totalItemsCost.text = total
     }
 
@@ -92,10 +78,7 @@ class MainActivity : AppCompatActivity() {
                 try {
                     val cost: Double = etCost.text.toString().toDouble()
                     data.add(PurchasedItem(etName.text.toString(), cost))
-                    var total: Double? = dataMap["TotalCostOfAllItemsCombined"]
-                    total = total?.plus(cost)
-                    total?.let { it1 -> dataMap.put("TotalCostOfAllItemsCombined", it1) }
-                    dataMap[etName.text.toString()] = cost
+                    dataMap.plus(cost).let { it1 -> dataMap = it1 }
                     Log.d("Map: ", dataMap.toString())
                 } catch (e: Exception) {
                     Log.e("Exception", "" + e.localizedMessage)
@@ -108,22 +91,5 @@ class MainActivity : AppCompatActivity() {
         }
         btnCancel.setOnClickListener { dialog.dismiss() }
         dialog.show()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getHawk()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Hawk.put("DATA", data)
-        Hawk.put("DMAP", dataMap)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Hawk.put("DATA", data)
-        Hawk.put("DMAP", dataMap)
     }
 }
