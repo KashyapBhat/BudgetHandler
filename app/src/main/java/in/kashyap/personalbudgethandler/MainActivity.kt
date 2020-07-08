@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
     private fun addItemToBuy() {
         val dialog = BottomSheetDialog(this, R.style.DialogStyle)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
+        dialog.setCancelable(true)
         dialog.setContentView(R.layout.add_item_layout)
         val body = dialog.findViewById(R.id.tvTitle) as TextView?
         val btnAdd = dialog.findViewById(R.id.btnAdd) as Button?
@@ -91,44 +91,23 @@ class MainActivity : AppCompatActivity() {
             if (etName.text.isNotEmpty() && etCost.text.isNotEmpty()) {
                 try {
                     val cost: Double = etCost.text.toString().toDouble()
-                    data.add(
-                        PurchasedItem(
-                            etName.text.toString(),
-                            cost
-                        )
-                    )
-                    var total: Double? = dataMap.get("TotalCostOfAllItemsCombined")
+                    data.add(PurchasedItem(etName.text.toString(), cost))
+                    var total: Double? = dataMap["TotalCostOfAllItemsCombined"]
                     total = total?.plus(cost)
                     total?.let { it1 -> dataMap.put("TotalCostOfAllItemsCombined", it1) }
-                    dataMap.put(etName.text.toString(), cost)
+                    dataMap[etName.text.toString()] = cost
                     Log.d("Map: ", dataMap.toString())
                 } catch (e: Exception) {
                     Log.e("Exception", "" + e.localizedMessage)
                 }
                 setRecyclerView()
                 dialog.dismiss()
-                closeKeyboard()
             } else {
                 Toast.makeText(this, "Please assign proper values", Toast.LENGTH_SHORT).show()
             }
         }
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
+        btnCancel.setOnClickListener { dialog.dismiss() }
         dialog.show()
-        showKeyBoard()
-    }
-
-    private fun showKeyBoard() {
-        val inputMethodManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-    }
-
-    private fun closeKeyboard() {
-        val inputMethodManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
     override fun onResume() {
@@ -138,7 +117,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        closeKeyboard()
         Hawk.put("DATA", data)
         Hawk.put("DMAP", dataMap)
     }
